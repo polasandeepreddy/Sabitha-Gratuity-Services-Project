@@ -1,0 +1,2211 @@
+project/src/components/Footer.tsx:-
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ShieldCheck, Phone, Mail, MapPin, MessageCircle } from 'lucide-react';
+
+const Footer = () => {
+  return (
+    <footer className="bg-gray-900 text-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Company Info */}
+          <div className="col-span-1 md:col-span-2">
+            <div className="flex items-center space-x-2 mb-4">
+              <ShieldCheck className="h-8 w-8 text-blue-400" />
+              <span className="text-xl font-bold">Sabitha Gratuity Services</span>
+            </div>
+            <p className="text-gray-300 mb-4 max-w-md">
+              Professional gratuity and trust solutions provider serving clients across 
+              Telangana, Andhra Pradesh, and Karnataka since 2023. Your trusted partner 
+              for AS-15 valuations, trust formation, and PCIT approvals.
+            </p>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              <li><Link to="/" className="text-gray-300 hover:text-white transition-colors duration-200">Home</Link></li>
+              <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors duration-200">About Us</Link></li>
+              <li><Link to="/services" className="text-gray-300 hover:text-white transition-colors duration-200">Services</Link></li>
+              <li><Link to="/testimonials" className="text-gray-300 hover:text-white transition-colors duration-200">Testimonials</Link></li>
+              <li><Link to="/faq" className="text-gray-300 hover:text-white transition-colors duration-200">FAQ</Link></li>
+              <li><Link to="/contact" className="text-gray-300 hover:text-white transition-colors duration-200">Contact</Link></li>
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
+            <ul className="space-y-3">
+              <li className="flex items-center space-x-2">
+                <Phone className="h-4 w-4 text-blue-400" />
+                <span className="text-gray-300">+91 90005 52708</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <Mail className="h-4 w-4 text-blue-400" />
+                <span className="text-gray-300">neelima@gratuityservices.com</span>
+              </li>
+              <li className="flex items-start space-x-2">
+                <MapPin className="h-4 w-4 text-blue-400 mt-1" />
+                <span className="text-gray-300">
+                  Serving Telangana, Andhra Pradesh & Karnataka
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="border-t border-gray-800 mt-8 pt-8 text-center">
+          <p className="text-gray-400 text-sm text-center">
+            © {new Date().getFullYear()} <span className="font-medium">Sabitha Gratuity Services</span>. All rights reserved. | 
+            Founded by <span className="font-medium">M. Neelima Reddy</span>
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
+
+project/src/components/Navbar.tsx:-
+
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
+
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const location = useLocation();
+
+  const navigation = [
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/about' },
+    { name: 'Services', href: '/services' },
+    { name: 'Testimonials', href: '/testimonials' },
+    { name: 'FAQ', href: '/faq' },
+    { name: 'Contact', href: '/contact' },
+  ];
+
+  const isActive = (path) => location.pathname === path;
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setShowNavbar(false);
+      } else {
+        setShowNavbar(true);
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
+  return (
+    <nav
+      className={`bg-white shadow-lg fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
+        showNavbar ? 'translate-y-0' : '-translate-y-full'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-20 items-center">
+          
+          {/* Logo and Brand */}
+          <Link to="/" className="flex items-center space-x-1.5">
+            <img
+              src="/logo/SGS.png" // ✅ Correct path from public folder
+              alt="Logo"
+              className="h-16 w-16 object-contain"
+            />
+            <span className="text-xl font-bold text-gray-900">
+              Sabitha Gratuity Services
+            </span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                to={item.href}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  isActive(item.href)
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+            >
+              {isOpen ? (
+                <X className="block h-6 w-6" />
+              ) : (
+                <Menu className="block h-6 w-6" />
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Navigation */}
+      {isOpen && (
+        <div className="md:hidden">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                to={item.href}
+                onClick={() => setIsOpen(false)}
+                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                  isActive(item.href)
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+};
+
+export default Navbar;
+
+project/src/pages/About.tsx:-
+
+import React from 'react';
+import { Award, Calendar, MapPin, Users, Target, Eye, Heart } from 'lucide-react';
+
+const About = () => {
+  return (
+    <div className="pt-16">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-blue-50 to-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              About Sabitha Gratuity Services
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Your trusted partner for comprehensive gratuity and trust solutions, 
+              backed by decades of experience and professional expertise.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Story */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Story</h2>
+              <div className="space-y-4 text-gray-600">
+                <p>
+                  Sabitha Gratuity Services was founded in 2024 as a partnership firm, 
+                  building upon the individual expertise of our founder, M. Neelima Reddy, 
+                  who began providing specialized gratuity services in 2023.
+                </p>
+                <p>
+                  Having worked with a broking firm for nearly two decades, our founder 
+                  experienced firsthand the challenges clients face when liaising with 
+                  competent authorities for gratuity-related approvals. These experiences 
+                  inspired the creation of a dedicated service provider that would serve 
+                  as a one-stop solution for all gratuity and trust-related needs.
+                </p>
+                <p>
+                  Today, our team successfully serves reputed clients across Telangana, 
+                  Andhra Pradesh, and Karnataka, providing comprehensive solutions that 
+                  simplify complex regulatory processes.
+                </p>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-8 text-white">
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold mb-2">2023</div>
+                    <div className="text-blue-200 text-sm">Individual Services Started</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold mb-2">2024</div>
+                    <div className="text-blue-200 text-sm">Partnership Firm Established</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold mb-2">50+</div>
+                    <div className="text-blue-200 text-sm">Satisfied Clients</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold mb-2">3</div>
+                    <div className="text-blue-200 text-sm">States Served</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Founder Profile */}
+      <section className="bg-gray-50 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Meet Our Founder</h2>
+            <p className="text-xl text-gray-600">
+              Leading with expertise, experience, and dedication
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-1">
+                <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl p-6 text-white text-center">
+                  <div className="w-24 h-24 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <Users className="h-12 w-12 text-blue-600" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2">M. Neelima Reddy</h3>
+                  <p className="text-blue-200">Founder & Principal Consultant</p>
+                </div>
+              </div>
+
+              <div className="lg:col-span-2 space-y-6">
+                <div>
+                  <h4 className="text-xl font-semibold text-gray-900 mb-3">Professional Background</h4>
+                  <p className="text-gray-600">
+                    With over 20 years of experience in the insurance industry, M. Neelima Reddy 
+                    served as Head of Life Insurance Department at a prominent broking firm from 
+                    2004 to 2023. Her extensive experience in dealing with regulatory authorities 
+                    and understanding client challenges led to the formation of Sabitha Gratuity Services.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="text-xl font-semibold text-gray-900 mb-4">Qualifications & Certifications</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-start space-x-3">
+                      <Award className="h-6 w-6 text-blue-600 mt-1" />
+                      <div>
+                        <div className="font-semibold text-gray-900">Fellow, Insurance Institute of India (FIII)</div>
+                        <div className="text-sm text-gray-600">Pune - 2015</div>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <Award className="h-6 w-6 text-green-600 mt-1" />
+                      <div>
+                        <div className="font-semibold text-gray-900">Post Graduate in Journalism (MCJ)</div>
+                        <div className="text-sm text-gray-600">Osmania University - 2004</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-xl font-semibold text-gray-900 mb-3">Expertise Areas</h4>
+                  <div className="flex flex-wrap gap-3">
+                    <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">AS-15 Valuations</span>
+                    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Trust Formation</span>
+                    <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">PCIT Approvals</span>
+                    <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">Regulatory Compliance</span>
+                    <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">Insurance Broking</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Mission, Vision, Values */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="bg-blue-100 p-4 rounded-full w-fit mx-auto mb-6">
+                <Target className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h3>
+              <p className="text-gray-600">
+                To provide comprehensive, reliable, and efficient gratuity and trust 
+                solutions that simplify complex regulatory processes for our clients 
+                across multiple states.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-green-100 p-4 rounded-full w-fit mx-auto mb-6">
+                <Eye className="h-8 w-8 text-green-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Vision</h3>
+              <p className="text-gray-600">
+                To become the most trusted and preferred partner for gratuity and 
+                trust services, known for our expertise, integrity, and client-centric 
+                approach across South India.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-purple-100 p-4 rounded-full w-fit mx-auto mb-6">
+                <Heart className="h-8 w-8 text-purple-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Values</h3>
+              <p className="text-gray-600">
+                Integrity, excellence, client satisfaction, and continuous learning 
+                drive everything we do. We believe in building long-term relationships 
+                based on trust and professional excellence.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Geographic Reach */}
+      <section className="bg-gray-50 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Geographic Reach</h2>
+            <p className="text-xl text-gray-600">
+              Serving clients across three major states in South India
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+              <div className="bg-orange-100 p-4 rounded-full w-fit mx-auto mb-4">
+                <MapPin className="h-8 w-8 text-orange-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Telangana</h3>
+              <p className="text-gray-600">
+                Comprehensive coverage across Telangana with deep understanding 
+                of local regulatory requirements and business environment.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+              <div className="bg-blue-100 p-4 rounded-full w-fit mx-auto mb-4">
+                <MapPin className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Andhra Pradesh</h3>
+              <p className="text-gray-600">
+                Extensive network and experience serving businesses across 
+                Andhra Pradesh with personalized service delivery.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+              <div className="bg-green-100 p-4 rounded-full w-fit mx-auto mb-4">
+                <MapPin className="h-8 w-8 text-green-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Karnataka</h3>
+              <p className="text-gray-600">
+                Growing presence in Karnataka with dedicated support for 
+                businesses seeking reliable gratuity and trust services.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose Us</h2>
+            <p className="text-xl text-gray-600">
+              Combining experience, expertise, and dedication for exceptional results
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="bg-blue-600 text-white p-4 rounded-full w-fit mx-auto mb-4">
+                <Award className="h-8 w-8" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Professional Excellence</h3>
+              <p className="text-sm text-gray-600">FIII qualified founder with 20+ years experience</p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-green-600 text-white p-4 rounded-full w-fit mx-auto mb-4">
+                <Users className="h-8 w-8" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Client-Centric Approach</h3>
+              <p className="text-sm text-gray-600">Tailored solutions for each client's unique needs</p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-purple-600 text-white p-4 rounded-full w-fit mx-auto mb-4">
+                <Calendar className="h-8 w-8" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Timely Delivery</h3>
+              <p className="text-sm text-gray-600">Consistent track record of meeting deadlines</p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-orange-600 text-white p-4 rounded-full w-fit mx-auto mb-4">
+                <MapPin className="h-8 w-8" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Multi-State Coverage</h3>
+              <p className="text-sm text-gray-600">Comprehensive service across three states</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default About;
+
+project/src/pages/Contact.tsx:-
+
+import React, { useState } from 'react';
+import {
+  Phone,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Send,
+  Clock,
+  CheckCircle,
+  Award,
+} from 'lucide-react';
+
+const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    company: '',
+    service: 'AS-15 Valuation',
+    message: '',
+  });
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitted(true);
+    setTimeout(() => setIsSubmitted(false), 3000);
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const services = [
+    'AS-15 Valuation',
+    'Trust Formation',
+    'Trust Registration',
+    'PCIT Approval',
+    'Trust Rule Framing',
+    'Trust Modifications',
+    'General Consultation',
+  ];
+
+  const contactMethods = [
+    {
+      icon: Phone,
+      title: 'Phone',
+      details: '+91 90005 52708',
+      description: 'Mon-Fri from 9am to 6pm',
+      action: 'tel:+919000552708',
+    },
+    {
+      icon: Mail,
+      title: 'Email',
+      details: 'neelima@gratuityservices.com',
+      description: 'We respond within 24 hours',
+      action: 'mailto:neelima@gratuityservices.com',
+    },
+    {
+      icon: MapPin,
+      title: 'Service Areas',
+      details: 'Telangana, Andhra Pradesh, Karnataka',
+      description: 'On-site consultations available',
+      action: '#',
+    },
+  ];
+
+  const officeHours = [
+    { day: 'Monday - Friday', hours: '9:00 AM - 6:00 PM' },
+    { day: 'Saturday', hours: '9:00 AM - 2:00 PM' },
+    { day: 'Sunday', hours: 'Closed' },
+  ];
+
+  return (
+    <div className="pt-16">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-blue-50 to-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Get In Touch
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+              Ready to get started with your gratuity and trust requirements?
+              Contact us today for expert consultation and personalized
+              solutions.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 text-sm">
+              <div className="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-sm">
+                <Clock className="h-4 w-4 text-blue-500" />
+                <span>Quick Response</span>
+              </div>
+              <div className="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-sm">
+                <Award className="h-4 w-4 text-purple-500" />
+                <span>Expert Guidance</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Methods */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            {contactMethods.map((method, index) => (
+              <div
+                key={index}
+                className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300"
+              >
+                <div className="bg-blue-100 p-3 rounded-lg w-fit mb-4">
+                  <method.icon className="h-6 w-6 text-blue-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  {method.title}
+                </h3>
+                <p className="text-blue-600 font-medium mb-2">
+                  {method.details}
+                </p>
+                <p className="text-sm text-gray-600 mb-4">
+                  {method.description}
+                </p>
+                {method.action !== '#' && (
+                  <a
+                    href={method.action}
+                    className="text-sm text-blue-600 font-medium hover:text-blue-700"
+                    target={
+                      method.action.startsWith('http') ? '_blank' : undefined
+                    }
+                    rel={
+                      method.action.startsWith('http')
+                        ? 'noopener noreferrer'
+                        : undefined
+                    }
+                  >
+                    Contact Now →
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Form and Info */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Contact Form */}
+            <div className="bg-white p-8 rounded-2xl shadow-lg">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                Send Us a Message
+              </h2>
+
+              {/* ⚠️ Warning Message */}
+              <div className="text-yellow-700 bg-yellow-100 border border-yellow-300 rounded-lg px-4 py-3 text-sm mb-4 space-y-2">
+                <div className="flex items-start space-x-2">
+                  <span className="text-lg">⚠️</span>
+                  <span>
+                    <strong>Note:</strong> The website is currently under development. Please check back later for more updates.
+                  </span>
+                </div>
+                <div className="flex items-start space-x-2">
+                  <span className="text-blue-700">📧</span>
+                  <span>
+                    You can still contact us at <strong>neelima@gratuityservices.com</strong> for immediate assistance.
+                  </span>
+                </div>
+              </div>
+
+              {isSubmitted && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <p className="text-green-800 font-medium">
+                      Thank you! We'll get back to you within 24 hours.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      required
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter your email"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      htmlFor="phone"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Phone Number *
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      required
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter your phone number"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="company"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Company Name
+                    </label>
+                    <input
+                      type="text"
+                      id="company"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter company name"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="service"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Service Required *
+                  </label>
+                  <select
+                    id="service"
+                    name="service"
+                    required
+                    value={formData.service}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    {services.map((service) => (
+                      <option key={service} value={service}>
+                        {service}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Message *
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    required
+                    rows={4}
+                    value={formData.message}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Please describe your requirements in detail..."
+                  ></textarea>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center"
+                >
+                  Send Message
+                  <Send className="ml-2 h-5 w-5" />
+                </button>
+              </form>
+            </div>
+
+            {/* Contact Information */}
+            <div className="space-y-8">
+              <div className="bg-white p-6 rounded-xl shadow-lg">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Clock className="h-6 w-6 text-blue-600" />
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    Office Hours
+                  </h3>
+                </div>
+                <div className="space-y-3">
+                  {officeHours.map((schedule, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center py-2 border-b border-gray-100 last:border-b-0"
+                    >
+                      <span className="text-gray-700">{schedule.day}</span>
+                      <span className="font-medium text-gray-900">
+                        {schedule.hours}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-blue-600 to-blue-800 p-6 rounded-xl text-white">
+                <h3 className="text-xl font-semibold mb-4">Why Contact Us?</h3>
+                <ul className="space-y-3">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle className="h-5 w-5 text-yellow-300 mt-0.5 flex-shrink-0" />
+                    <span>
+                      Free initial consultation and requirement analysis
+                    </span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle className="h-5 w-5 text-yellow-300 mt-0.5 flex-shrink-0" />
+                    <span>
+                      Expert guidance from FIII qualified professionals
+                    </span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle className="h-5 w-5 text-yellow-300 mt-0.5 flex-shrink-0" />
+                    <span>Transparent pricing with no hidden costs</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle className="h-5 w-5 text-yellow-300 mt-0.5 flex-shrink-0" />
+                    <span>Quick response within 24 hours guaranteed</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle className="h-5 w-5 text-yellow-300 mt-0.5 flex-shrink-0" />
+                    <span>Multi-state coverage across South India</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Actions */}
+      <section className="flex justify-center items-center min-h-[60vh] px-4">
+        <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-2xl border border-gray-100">
+          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+            Quick Actions
+          </h3>
+
+          <div className="space-y-4">
+            <a
+              href="tel:+919000552708"
+              className="flex items-center p-4 rounded-xl bg-blue-50 hover:bg-blue-100 transition duration-200"
+            >
+              <Phone className="h-6 w-6 text-blue-600 mr-3" />
+              <span className="text-blue-800 font-semibold text-base">
+                Call Now
+              </span>
+            </a>
+
+            <a
+              href="mailto:neelima@gratuityservices.com"
+              className="flex items-center p-4 rounded-xl bg-purple-50 hover:bg-purple-100 transition duration-200"
+            >
+              <Mail className="h-6 w-6 text-purple-600 mr-3" />
+              <span className="text-purple-800 font-semibold text-base">
+                Send Email
+              </span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Contact;
+
+project/src/FAQ.tsx:-
+
+import React, { useState } from 'react';
+import { ChevronDown, ChevronUp, HelpCircle, Calculator, FileText, Building2, UserCheck, Settings, Clock } from 'lucide-react';
+
+const FAQ = () => {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const faqCategories = [
+    {
+      title: 'AS-15 Valuations',
+      icon: Calculator,
+      faqs: [
+        {
+          question: 'What is AS-15 valuation and why is it required?',
+          answer: 'AS-15 valuation is an accounting standard that requires companies to recognize and measure employee benefits, including gratuity, leave encashment, and superannuation. It ensures accurate financial reporting by calculating the present value of defined benefit obligations. This valuation is mandatory for companies to comply with accounting standards and provide transparent financial statements.'
+        },
+        {
+          question: 'How often should AS-15 valuations be conducted?',
+          answer: 'AS-15 valuations should be conducted annually for financial reporting purposes. However, companies may also require interim valuations in case of significant changes in employee demographics, benefit structures, or actuarial assumptions. Regular valuations ensure compliance and accurate financial planning.'
+        },
+        {
+          question: 'What information is required for AS-15 valuation?',
+          answer: 'For AS-15 valuation, we require employee data including age, service period, salary details, past service records, and benefit structure details. We also need information about the discount rate, salary escalation assumptions, mortality tables, and withdrawal rates applicable to your organization.'
+        },
+        {
+          question: 'How long does the AS-15 valuation process take?',
+          answer: 'Typically, AS-15 valuation takes 2-4 working days from the date of receiving complete employee data and required information. The timeline may vary based on the complexity of the benefit structure and size of the employee base.'
+        }
+      ]
+    },
+    {
+      title: 'Trust Formation',
+      icon: FileText,
+      faqs: [
+        {
+          question: 'Why should I form a gratuity trust for my company?',
+          answer: 'Forming a gratuity trust provides several benefits including tax advantages, better fund management, regulatory compliance, and protection of employee benefits. It helps companies set aside funds specifically for gratuity payments and ensures employees receive their benefits even if the company faces financial difficulties.'
+        },
+        {
+          question: 'What documents are required for trust formation?',
+          answer: 'Trust formation requires several documents including Trust Deed, Memorandum and Articles of Association, Board Resolution, Trustee appointment letters, KYC documents of trustees, bank account details, and employee benefit scheme details. We assist in preparing all necessary documentation.'
+        },
+        {
+          question: 'Who can be appointed as trustees?',
+          answer: 'Trustees can be company representatives, independent professionals, or employees. Typically, trusts have 3-5 trustees including company nominees and employee representatives. Trustees should be individuals with good standing and understanding of fiduciary responsibilities.'
+        },
+        {
+          question: 'Can trust rules be modified after formation?',
+          answer: 'Yes, trust rules can be modified with proper procedures and approvals. Any amendments require trustee approval, regulatory compliance checks, and may need PCIT endorsement depending on the nature of changes. We provide complete support for trust modifications.'
+        }
+      ]
+    },
+    {
+      title: 'Trust Registration',
+      icon: Building2,
+      faqs: [
+        {
+          question: 'Is trust registration mandatory?',
+          answer: 'Yes, trust registration is mandatory under the Registration Act. Registration provides legal validity, enables tax benefits, and ensures regulatory compliance. Unregistered trusts may face legal challenges and tax implications.'
+        },
+        {
+          question: 'Which authority handles trust registration?',
+          answer: 'Trust registration is handled by the Sub Registrar Office in the jurisdiction where the trust is established. The process involves document verification, stamp duty payment, and registration formalities.'
+        },
+        {
+          question: 'What are the costs involved in trust registration?',
+          answer: 'Trust registration costs include stamp duty (varies by state), registration fees, documentation charges, and professional service fees. We provide transparent cost estimates based on your specific requirements and jurisdiction.'
+        },
+        {
+          question: 'How long does trust registration take?',
+          answer: 'Trust registration typically takes 2-3 weeks from document submission, depending on the Sub Registrar Office workload and documentation completeness. We handle all liaison work to ensure smooth processing.'
+        }
+      ]
+    },
+    {
+      title: 'PCIT Approvals',
+      icon: UserCheck,
+      faqs: [
+        {
+          question: 'What is PCIT approval and when is it required?',
+          answer: 'Contributions to an approved Gratuity fund is deductible under section 36 (1)(v) of the Income Tax Act, 1961. Income accrued on the investment made by the group gratuity scheme is exempt from income tax under section 10(25)(iv). It ensures the trust complies with income tax regulations and operates for genuine employee welfare purposes.'
+        },
+        {
+          question: 'What changes require PCIT endorsement?',
+          answer: 'PCIT endorsement is required for trustee changes, registered office address changes, employee count modifications, trust rule amendments, partial winding up, complete closure, employee transfers between trusts, and jurisdiction changes.'
+        },
+        {
+          question: 'How long does PCIT approval take?',
+          answer: 'PCIT approval typically takes 6-8 weeks from application submission. The timeline depends on the complexity of the case and PCIT office workload. We maintain regular follow-up to expedite the process.'
+        },
+        {
+          question: 'What if PCIT approval is delayed or rejected?',
+          answer: 'In case of delays, we provide regular follow-up and status updates. If rejected, we analyze the reasons, address concerns, and resubmit with necessary modifications. Our experience helps in successfully obtaining approvals.'
+        }
+      ]
+    },
+    {
+      title: 'General Questions',
+      icon: HelpCircle,
+      faqs: [
+        {
+          question: 'Which states do you provide services in?',
+          answer: 'We provide comprehensive gratuity and trust services across Telangana, Andhra Pradesh, and Karnataka. Our team has extensive experience with regulatory requirements in these states and maintains good relationships with local authorities.'
+        },
+        {
+          question: 'Do you provide ongoing support after service completion?',
+          answer: 'Yes, we provide ongoing support including periodic compliance reviews, annual maintenance, regulatory updates, and assistance with any future modifications or endorsements. Our relationship with clients extends beyond project completion.'
+        },
+        {
+          question: 'What makes your services different from others?',
+          answer: 'Our founder brings 20+ years of insurance industry experience with FIII qualification. We provide end-to-end solutions, maintain high success rates, ensure timely delivery, and offer personalized service with dedicated support throughout the process.'
+        },
+        {
+          question: 'How do you ensure confidentiality of client information?',
+          answer: 'We maintain strict confidentiality protocols including secure document handling, limited access controls, non-disclosure agreements, and professional ethical standards. Client information is protected throughout our engagement and beyond.'
+        },
+        {
+          question: 'Do you provide emergency or urgent services?',
+          answer: 'Yes, we understand business urgencies and provide expedited services when required. Our team can prioritize urgent cases and work extended hours to meet critical deadlines while maintaining quality standards.'
+        }
+      ]
+    }
+  ];
+
+  const allFaqs = faqCategories.flatMap((category, categoryIndex) =>
+    category.faqs.map((faq, faqIndex) => ({
+      ...faq,
+      categoryTitle: category.title,
+      categoryIcon: category.icon,
+      index: categoryIndex * 10 + faqIndex
+    }))
+  );
+
+  return (
+    <div className="pt-16">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-blue-50 to-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="flex justify-center mb-6">
+            <div className="bg-blue-100 p-4 rounded-full">
+              <HelpCircle className="h-12 w-12 text-blue-600" />
+            </div>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            Frequently Asked Questions
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            Find answers to common questions about our gratuity and trust services. 
+            Can't find what you're looking for? Contact us for personalized assistance.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4 text-sm">
+            <div className="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-sm">
+              <Clock className="h-4 w-4 text-green-500" />
+              <span>Quick Answers</span>
+            </div>
+            <div className="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-sm">
+              <UserCheck className="h-4 w-4 text-blue-500" />
+              <span>Expert Guidance</span>
+            </div>
+            <div className="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-sm">
+              <HelpCircle className="h-4 w-4 text-purple-500" />
+              <span>Comprehensive Coverage</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Categories Overview */}
+      <section className="py-12 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {faqCategories.map((category, index) => (
+              <div key={index} className="text-center">
+                <div className="bg-white p-4 rounded-xl shadow-sm mb-3">
+                  <category.icon className="h-8 w-8 text-blue-600 mx-auto" />
+                </div>
+                <h3 className="font-semibold text-gray-900 text-sm">{category.title}</h3>
+                <p className="text-xs text-gray-600">{category.faqs.length} questions</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="space-y-4">
+            {allFaqs.map((faq, index) => (
+              <div
+                key={index}
+                className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+              >
+                <button
+                  className="w-full px-6 py-4 text-left flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
+                  onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                >
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-blue-100 p-2 rounded-lg">
+                      <faq.categoryIcon className="h-5 w-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 text-left">
+                        {faq.question}
+                      </h3>
+                      <p className="text-sm text-blue-600 font-medium">{faq.categoryTitle}</p>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 ml-4">
+                    {openIndex === index ? (
+                      <ChevronUp className="h-5 w-5 text-gray-500" />
+                    ) : (
+                      <ChevronDown className="h-5 w-5 text-gray-500" />
+                    )}
+                  </div>
+                </button>
+                
+                {openIndex === index && (
+                  <div className="px-6 pb-4">
+                    <div className="border-t border-gray-100 pt-4">
+                      <p className="text-gray-700 leading-relaxed">{faq.answer}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Still Have Questions */}
+      <section className="bg-gray-50 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Still Have Questions?
+            </h2>
+            <p className="text-xl text-gray-600 mb-8">
+              Our team of experts is here to help you with personalized guidance 
+              and detailed explanations for your specific requirements.
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="bg-white p-6 rounded-xl shadow-sm">
+                <div className="bg-blue-100 p-3 rounded-full w-fit mx-auto mb-4">
+                  <HelpCircle className="h-6 w-6 text-blue-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Expert Consultation</h3>
+                <p className="text-sm text-gray-600">Get personalized advice from our experienced professionals</p>
+              </div>
+              
+              <div className="bg-white p-6 rounded-xl shadow-sm">
+                <div className="bg-green-100 p-3 rounded-full w-fit mx-auto mb-4">
+                  <Clock className="h-6 w-6 text-green-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Quick Response</h3>
+                <p className="text-sm text-gray-600">Receive answers to your queries within 24 hours</p>
+              </div>
+              
+              <div className="bg-white p-6 rounded-xl shadow-sm">
+                <div className="bg-purple-100 p-3 rounded-full w-fit mx-auto mb-4">
+                  <UserCheck className="h-6 w-6 text-purple-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Detailed Guidance</h3>
+                <p className="text-sm text-gray-600">Comprehensive explanations tailored to your situation</p>
+              </div>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200">
+                Schedule Consultation
+              </button>
+              <button className="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-200">
+                Contact Our Experts
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default FAQ;
+
+project/src/Home.tsx:-
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Shield, Users, Award, CheckCircle, Star, Calculator, FileText, Building2, UserCheck, Settings } from 'lucide-react';
+
+const Home = () => {
+  const services = [
+    {
+      icon: Calculator,
+      title: 'AS-15 Valuations',
+      description: 'Expert valuations for Group Gratuity, Superannuation, and Leave Encashment policies.'
+    },
+    {
+      icon: FileText,
+      title: 'Trust Formation',
+      description: 'Complete assistance in preparing trust deeds and formation documents.'
+    },
+    {
+      icon: Building2,
+      title: 'Trust Registration',
+      description: 'Facilitate trust registration with Sub Registrar Office coordination.'
+    },
+    {
+      icon: UserCheck,
+      title: 'PCIT Endorsements',
+      description: 'Support for all trust modifications and approvals from PCIT.'
+    }
+  ];
+
+  const testimonials = [
+    {
+      name: 'Rajesh Kumar',
+      company: 'Tech Solutions Pvt Ltd',
+      text: 'Excellent service for our gratuity trust setup. Professional and timely delivery.',
+      rating: 5
+    },
+    {
+      name: 'Priya Sharma',
+      company: 'Manufacturing Corp',
+      text: 'Sabitha team handled our AS-15 valuation seamlessly. Highly recommended.',
+      rating: 5
+    },
+    {
+      name: 'Anil Reddy',
+      company: 'Healthcare Services',
+      text: 'Outstanding support for PCIT approvals. Made the complex process simple.',
+      rating: 5
+    }
+  ];
+
+  return (
+    <div>
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-blue-600 text-white">
+        <div className="absolute inset-0 bg-black opacity-10"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+              One-Stop <span className="text-yellow-400">Gratuity</span> & 
+              <br />Trust Solutions
+            </h1>
+            <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto leading-relaxed">
+              Professional AS-15 valuations, trust formation, and PCIT approvals 
+              across Telangana, Andhra Pradesh, and Karnataka since 2023
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/contact"
+                className="bg-yellow-500 text-blue-900 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-yellow-400 transition-colors duration-200 flex items-center justify-center"
+              >
+                Get Consultation
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+              <Link
+                to="/services"
+                className="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-900 transition-colors duration-200"
+              >
+                Our Services
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Indicators */}
+      <section className="bg-gray-50 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div className="flex flex-col items-center">
+              <div className="bg-blue-100 p-4 rounded-full mb-3">
+                <Users className="h-8 w-8 text-blue-600" />
+              </div>
+              <div className="text-2xl font-bold text-gray-900">50+</div>
+              <div className="text-gray-600">Happy Clients</div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="bg-green-100 p-4 rounded-full mb-3">
+                <Shield className="h-8 w-8 text-green-600" />
+              </div>
+              <div className="text-2xl font-bold text-gray-900">100%</div>
+              <div className="text-gray-600">Success Rate</div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="bg-yellow-100 p-4 rounded-full mb-3">
+                <Award className="h-8 w-8 text-yellow-600" />
+              </div>
+              <div className="text-2xl font-bold text-gray-900">20+</div>
+              <div className="text-gray-600">Years Experience</div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="bg-purple-100 p-4 rounded-full mb-3">
+                <Building2 className="h-8 w-8 text-purple-600" />
+              </div>
+              <div className="text-2xl font-bold text-gray-900">3</div>
+              <div className="text-gray-600">States Covered</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Our Professional Services
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Comprehensive gratuity and trust solutions tailored to your business needs
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {services.map((service, index) => (
+              <div
+                key={index}
+                className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100"
+              >
+                <div className="bg-blue-100 p-3 rounded-lg w-fit mb-4">
+                  <service.icon className="h-6 w-6 text-blue-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  {service.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {service.description}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link
+              to="/services"
+              className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 inline-flex items-center"
+            >
+              View All Services
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* About Preview */}
+      <section className="bg-gray-50 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                Why Choose Sabitha Gratuity Services?
+              </h2>
+              <p className="text-lg text-gray-600 mb-6">
+                Founded by M. Neelima Reddy (FIII), our firm brings over two decades 
+                of insurance and financial services expertise to provide comprehensive 
+                gratuity and trust solutions.
+              </p>
+              <ul className="space-y-4">
+                <li className="flex items-start space-x-3">
+                  <CheckCircle className="h-6 w-6 text-green-500 mt-1" />
+                  <span className="text-gray-700">Expert AS-15 valuations with regulatory compliance</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <CheckCircle className="h-6 w-6 text-green-500 mt-1" />
+                  <span className="text-gray-700">End-to-end trust formation and registration support</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <CheckCircle className="h-6 w-6 text-green-500 mt-1" />
+                  <span className="text-gray-700">Seamless PCIT approval and endorsement services</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <CheckCircle className="h-6 w-6 text-green-500 mt-1" />
+                  <span className="text-gray-700">Serving clients across three states with dedication</span>
+                </li>
+              </ul>
+              <Link
+                to="/about"
+                className="inline-flex items-center mt-8 text-blue-600 font-semibold hover:text-blue-700"
+              >
+                Learn More About Us
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </div>
+            <div className="relative">
+              <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-8 text-white">
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold mb-2">M. Neelima Reddy</h3>
+                  <p className="text-blue-200">Founder & Principal Consultant</p>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <Award className="h-5 w-5 text-yellow-400" />
+                    <span>Fellow, Insurance Institute of India (FIII)</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Building2 className="h-5 w-5 text-yellow-400" />
+                    <span>20+ Years Insurance Industry Experience</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Users className="h-5 w-5 text-yellow-400" />
+                    <span>Former Head - Life Insurance Department</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="bg-gradient-to-r from-blue-600 to-blue-800 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Ready to Get Started?
+          </h2>
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            Contact us today for consultation and let us handle your 
+            gratuity and trust requirements professionally.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              to="/contact"
+              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200"
+            >
+              Book Consultation
+            </Link>
+            <a
+            href="tel:+919000552708"
+            className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors duration-200">
+              Call Us
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Home;
+
+project/src/Sevices.tsx:-
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Calculator, FileText, Building2, UserCheck, Settings,
+  CheckCircle, ArrowRight, Clock, Shield
+} from 'lucide-react';
+
+const Services = () => {
+  const services = [
+    {
+      icon: Calculator,
+      title: 'AS-15 Valuations',
+      subtitle: 'Expert Actuarial Valuations',
+      description: 'Comprehensive AS-15 valuations for Group Gratuity, Group Superannuation, and Leave Encashment policies in compliance with accounting standards.',
+      features: [
+        'Group Gratuity Policy Valuations',
+        'Group Superannuation Assessments',
+        'Leave Encashment Calculations',
+        'Compliance with AS-15 Standards',
+        'Regular Periodic Reviews',
+        'Detailed Valuation Reports'
+      ],
+      benefits: [
+        'Accurate financial reporting',
+        'Regulatory compliance assurance',
+        'Professional documentation',
+        'Expert analysis and insights'
+      ]
+    },
+    {
+      icon: FileText,
+      title: 'Trust Formation Assistance',
+      subtitle: 'Complete Documentation Support',
+      description: 'End-to-end assistance in preparing trust deeds and all related documents required for trust formation as per regulatory requirements.',
+      features: [
+        'Trust Deed Preparation',
+        'Legal Document Drafting',
+        'Regulatory Compliance Review',
+        'Documentation Verification',
+        'Amendment Support',
+        'Template Customization'
+      ],
+      benefits: [
+        'Legally compliant documentation',
+        'Reduced formation time',
+        'Professional guidance',
+        'Error-free paperwork'
+      ]
+    },
+    {
+      icon: Building2,
+      title: 'Trust Registration',
+      subtitle: 'Seamless Registration Process',
+      description: 'Complete facilitation of trust registration with Sub Registrar Office through expert coordination and liaison services.',
+      features: [
+        'Sub Registrar Office Coordination',
+        'Application Processing',
+        'Document Submission',
+        'Follow-up Management',
+        'Status Updates',
+        'Registration Certificate Collection'
+      ],
+      benefits: [
+        'Hassle-free registration',
+        'Faster processing',
+        'Regular status updates',
+        'Professional representation'
+      ]
+    },
+    {
+      icon: UserCheck,
+      title: 'PCIT Endorsements',
+      subtitle: 'Comprehensive Approval Support',
+      description: 'Expert support for obtaining PCIT approvals and handling all types of trust modifications and endorsements.',
+      features: [
+        'Initial PCIT Approval',
+        'Trustee Changes',
+        'Address Modifications',
+        'Employee Count Updates',
+        'Trust Winding Procedures',
+        'Complete Trust Closure',
+        'Partial Employee Movement',
+        'Jurisdiction Changes'
+      ],
+      benefits: [
+        'Streamlined approval process',
+        'Expert liaison services',
+        'Comprehensive support',
+        'Timely approvals'
+      ]
+    },
+    {
+      icon: Settings,
+      title: 'Trust Rule Framing',
+      subtitle: 'Regulatory Compliance Framework',
+      description: 'Professional assistance in framing trust rules in accordance with Income Tax Act, Insurance regulations, and other applicable Gratuity Laws.',
+      features: [
+        'Income Tax Act Compliance',
+        'Insurance Regulation Alignment',
+        'Gratuity Law Integration',
+        'Custom Rule Development',
+        'Regular Updates',
+        'Legal Review'
+      ],
+      benefits: [
+        'Full regulatory compliance',
+        'Customized solutions',
+        'Legal protection',
+        'Future-proof framework'
+      ]
+    }
+  ];
+
+  return (
+    <div className="pt-16">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-blue-50 to-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            Our Professional Services
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            Comprehensive gratuity and trust solutions designed to meet all your 
+            regulatory and compliance requirements with professional excellence.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4 text-sm">
+            <div className="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-sm">
+              <Shield className="h-4 w-4 text-green-500" />
+              <span>100% Success Rate</span>
+            </div>
+            <div className="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-sm">
+              <Clock className="h-4 w-4 text-blue-500" />
+              <span>Timely Delivery</span>
+            </div>
+            <div className="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-sm">
+              <UserCheck className="h-4 w-4 text-purple-500" />
+              <span>Expert Support</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="space-y-16">
+            {services.map((service, index) => (
+              <div
+                key={index}
+                className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''}`}
+              >
+                <div className={index % 2 === 1 ? 'lg:col-start-2' : ''}>
+                  <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-8 text-white">
+                    <div className="flex items-center space-x-4 mb-6">
+                      <div className="bg-white bg-opacity-20 p-3 rounded-lg">
+                        <service.icon className="h-8 w-8 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-bold">{service.title}</h3>
+                        <p className="text-blue-200">{service.subtitle}</p>
+                      </div>
+                    </div>
+                    <p className="text-blue-100 mb-6">{service.description}</p>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <h4 className="font-semibold mb-3 text-yellow-300">Key Benefits:</h4>
+                        <ul className="space-y-2">
+                          {service.benefits.map((benefit, i) => (
+                            <li key={i} className="flex items-start space-x-2 text-sm">
+                              <CheckCircle className="h-4 w-4 text-yellow-300 mt-0.5 flex-shrink-0" />
+                              <span className="text-blue-100">{benefit}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={index % 2 === 1 ? 'lg:col-start-1' : ''}>
+                  <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                    <h4 className="text-xl font-bold text-gray-900 mb-6">Service Features:</h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {service.features.map((feature, i) => (
+                        <div key={i} className="flex items-start space-x-3">
+                          <div className="bg-blue-100 p-1 rounded-full mt-1">
+                            <CheckCircle className="h-4 w-4 text-blue-600" />
+                          </div>
+                          <span className="text-gray-700 text-sm">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mt-8 pt-6 border-t border-gray-100">
+                      <Link
+                        to={`/contact?service=${encodeURIComponent(service.title)}`}
+                        className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 flex items-center"
+                      >
+                        Get Quote for {service.title}
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="bg-gradient-to-r from-blue-600 to-blue-800 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">
+            Need Professional Gratuity Services?
+          </h2>
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            Contact us today to discuss your requirements and get a customized solution for your business needs.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              to="/contact"
+              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200"
+            >
+              Request Consultation
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Services;
+
+project/src/Testimonials.tsx:-
+
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Star, Quote, Building, MapPin, Calendar } from 'lucide-react';
+
+const Testimonials = () => {
+  // Initial testimonials (add objects here if you have seed data)
+  const [testimonials, setTestimonials] = useState([]);
+
+  // Stats data
+  const stats = [
+    { number: '50+', label: 'Happy Clients' },
+    { number: '100%', label: 'Success Rate' },
+    { number: '3', label: 'States Covered' },
+    { number: '24/7', label: 'Support Available' },
+  ];
+
+  // Form state
+  const [formData, setFormData] = useState({
+    name: '',
+    position: '',
+    company: '',
+    location: '',
+    rating: 5,
+    date: '',
+    text: '',
+    services: '',
+  });
+
+  // Success message state
+  const [successMessage, setSuccessMessage] = useState('');
+
+  // Controls how many testimonials are shown initially
+  const [visibleCount, setVisibleCount] = useState(4);
+
+  // Handle input change
+  const handleChange = (e: { target: { name: string; value: string } }) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Set rating
+  const setRating = (rate: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      rating: rate,
+    }));
+  };
+
+  // Submit form
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    // Parse services into array
+    const servicesArray = formData.services
+      ? formData.services.split(',').map((s) => s.trim())
+      : [];
+
+    // Format date "Month Year"
+    let formattedDate = formData.date;
+    if (formData.date) {
+      const [year, month] = formData.date.split('-');
+      const dateObj = new Date(Number(year), Number(month) - 1);
+      formattedDate = dateObj.toLocaleString('default', {
+        month: 'long',
+        year: 'numeric',
+      });
+    }
+
+    const newTestimonial = {
+      name: formData.name,
+      position: formData.position,
+      company: formData.company,
+      location: formData.location,
+      rating: formData.rating,
+      date: formattedDate,
+      text: formData.text,
+      services: servicesArray,
+    };
+
+    // Add new testimonial at the start
+    setTestimonials((prev) => [newTestimonial, ...prev]);
+
+    // Reset form
+    setFormData({
+      name: '',
+      position: '',
+      company: '',
+      location: '',
+      rating: 5,
+      date: '',
+      text: '',
+      services: '',
+    });
+
+    // Show success message
+    setSuccessMessage('Thank you for submitting your testimonial!');
+    setTimeout(() => setSuccessMessage(''), 5000);
+  };
+
+  // Slice testimonials to show limited count
+  const visibleTestimonials = testimonials.slice(0, visibleCount);
+
+  // Show more handler
+  const handleShowMore = () => {
+    setVisibleCount((prev) => prev + 4);
+  };
+
+  return (
+    <div className="pt-16">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-blue-50 to-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            Client Testimonials
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            Discover what our clients say about our professional gratuity and
+            trust services. Real experiences from businesses across Telangana,
+            AP, and Karnataka.
+          </p>
+
+          {/* Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-2xl mx-auto">
+            {stats.map((stat, index) => (
+              <div key={index} className="text-center">
+                <div className="text-2xl md:text-3xl font-bold text-blue-600">
+                  {stat.number}
+                </div>
+                <div className="text-sm text-gray-600">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Grid */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          {visibleTestimonials.length === 0 ? (
+            <div className="bg-yellow-100 text-yellow-800 border border-yellow-300 rounded-lg px-6 py-5 text-center text-base md:text-lg max-w-2xl mx-auto">
+              <strong>Note:</strong> This section is under process. We're currently working on displaying our client testimonials. Please check back later for updates!
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {visibleTestimonials.map((testimonial, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 h-full flex flex-col hover:shadow-xl transition-shadow duration-300"
+                >
+                  <div className="flex justify-between mb-4">
+                    <Quote className="w-6 h-6 text-blue-600 opacity-50" />
+                    <div className="flex space-x-1">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className="w-4 h-4 text-yellow-400 fill-current"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-gray-700 italic mb-4 flex-grow">
+                    "{testimonial.text}"
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {testimonial.services.map((service, i) => (
+                      <span
+                        key={i}
+                        className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
+                      >
+                        {service}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="border-t border-gray-100 pt-4 mt-auto">
+                    <div className="flex justify-between">
+                      <div>
+                        <h3 className="font-bold text-gray-900">
+                          {testimonial.name}
+                        </h3>
+                        <p className="text-blue-600 text-sm">
+                          {testimonial.position}
+                        </p>
+                        <div className="flex items-center text-gray-600 text-sm">
+                          <Building className="w-4 h-4 mr-1" />
+                          {testimonial.company}
+                        </div>
+                        <div className="flex items-center text-gray-500 text-sm">
+                          <MapPin className="w-4 h-4 mr-1" />
+                          {testimonial.location}
+                        </div>
+                      </div>
+                      <div className="flex items-center text-gray-500 text-sm">
+                        <Calendar className="w-4 h-4 mr-1" />
+                        {testimonial.date}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {visibleCount < testimonials.length && (
+            <div className="mt-8 text-center">
+              <button
+                onClick={handleShowMore}
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+              >
+                Show More
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Success message */}
+      {successMessage && (
+        <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-4 mb-6 bg-green-100 border border-green-400 text-green-700 rounded-md text-center font-medium">
+          {successMessage}
+        </div>
+      )}
+
+      {/* Submit Your Testimonial (UNCHANGED) */}
+      <section className="max-w-4xl mx-auto px-4 py-12 bg-white rounded-2xl shadow-md border border-gray-200 mb-20">
+        <h2 className="text-3xl font-semibold mb-10 text-center text-gray-800">
+          Submit Your Testimonial
+        </h2>
+
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        >
+          {/* Name */}
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Name
+            </label>
+            <input
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-blue-500 focus:outline-none"
+              placeholder="Rajesh Kumar"
+            />
+          </div>
+
+          {/* Position */}
+          <div>
+            <label
+              htmlFor="position"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Position
+            </label>
+            <input
+              id="position"
+              name="position"
+              value={formData.position}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-blue-500 focus:outline-none"
+              placeholder="HR Director"
+            />
+          </div>
+
+          {/* Company */}
+          <div>
+            <label
+              htmlFor="company"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Company
+            </label>
+            <input
+              id="company"
+              name="company"
+              value={formData.company}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-blue-500 focus:outline-none"
+              placeholder="Tech Solutions Pvt Ltd"
+            />
+          </div>
+
+          {/* Location */}
+          <div>
+            <label
+              htmlFor="location"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Location
+            </label>
+            <input
+              id="location"
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-blue-500 focus:outline-none"
+              placeholder="Hyderabad, Telangana"
+            />
+          </div>
+
+          {/* Services */}
+          <div>
+            <label
+              htmlFor="services"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Services Used
+            </label>
+            <input
+              id="services"
+              name="services"
+              value={formData.services}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-blue-500 focus:outline-none"
+              placeholder="Trust Formation, AS-15 Valuation"
+            />
+          </div>
+
+          {/* Date */}
+          <div>
+            <label
+              htmlFor="date"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Date
+            </label>
+            <input
+              id="date"
+              name="date"
+              type="month"
+              value={formData.date}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+
+          {/* Testimonial Textarea */}
+          <div className="md:col-span-3">
+            <label
+              htmlFor="text"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Testimonial
+            </label>
+            <textarea
+              id="text"
+              name="text"
+              value={formData.text}
+              onChange={handleChange}
+              required
+              rows={3} // reduced from 4
+              className="w-full border border-gray-300 rounded-md px-2 py-1.5 text-sm focus:ring-blue-500 focus:outline-none resize-none"
+              placeholder="Share your experience..."
+            />
+          </div>
+
+          {/* Rating */}
+          <div className="md:col-span-3 flex items-center gap-2">
+            <label className="text-sm font-medium text-gray-700">Rating</label>
+            <div className="flex space-x-1">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => setRating(star)}
+                  className={`w-5 h-5 ${
+                    formData.rating >= star
+                      ? 'text-yellow-400'
+                      : 'text-gray-300 hover:text-yellow-400'
+                  }`}
+                  aria-label={`${star} star`}
+                >
+                  <Star className="w-4 h-4" />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <div className="md:col-span-3 text-center pt-4">
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition"
+            >
+              Submit Testimonial
+            </button>
+          </div>
+        </form>
+      </section>
+
+      {/* Client Success Metrics */}
+      <section className="bg-gray-50 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Our Success Metrics
+            </h2>
+            <p className="text-xl text-gray-600">
+              Measuring our success through client satisfaction and results
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <MetricBox
+              color="blue"
+              value="100%"
+              title="Client Satisfaction"
+              subtitle="All clients rate us 5 stars"
+            />
+            <MetricBox
+              color="green"
+              value="95%"
+              title="Faster Processing"
+              subtitle="Compared to industry average"
+            />
+            <MetricBox
+              color="purple"
+              value="0%"
+              title="Compliance Issues"
+              subtitle="Perfect compliance record"
+            />
+            <MetricBox
+              color="orange"
+              value="90%"
+              title="Repeat Clients"
+              subtitle="Choose us for additional services"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Industry Recognition */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Industry Recognition
+            </h2>
+            <p className="text-xl text-gray-600">
+              Trusted by businesses across various industries
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
+            {[
+              'Technology',
+              'Manufacturing',
+              'Healthcare',
+              'Financial Services',
+              'Engineering',
+              'Retail',
+              'Education',
+              'Pharmaceuticals',
+              'Automotive',
+              'Textiles',
+              'Food & Beverage',
+              'Construction',
+            ].map((industry, index) => (
+              <div
+                key={index}
+                className="text-center p-4 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors duration-200"
+              >
+                <div className="text-sm font-medium text-gray-700">
+                  {industry}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="bg-gradient-to-r from-blue-600 to-blue-800 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">
+            Join Our Satisfied Clients
+          </h2>
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            Experience the same level of professional service and expertise that
+            our clients rave about. Contact us today for your gratuity and trust
+            needs.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              to="/start"
+              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold text-center hover:bg-gray-100 transition-colors duration-200"
+            >
+              Start Your Project
+            </Link>
+            <Link
+              to="/contact"
+              className="bg-blue-900 text-white px-8 py-3 rounded-lg font-semibold text-center hover:bg-blue-700 transition-colors duration-200"
+            >
+              Contact Us
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+// Reusable Metric Box
+const MetricBox = ({
+  color,
+  value,
+  title,
+  subtitle,
+}: {
+  color: string;
+  value: string;
+  title: string;
+  subtitle: string;
+}) => (
+  <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+    <div className={`text-3xl font-bold text-${color}-600 mb-2`}>{value}</div>
+    <div className="text-gray-900 font-semibold mb-1">{title}</div>
+    <div className="text-sm text-gray-600">{subtitle}</div>
+  </div>
+);
+
+export default Testimonials;
